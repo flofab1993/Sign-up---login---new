@@ -8,37 +8,6 @@ class User {
       this.setLastAccess();
     }
   
-    // Function that allows us to set lastAccess to current time in unix time (Date.now())
-    setLastAccess(){
-      this.lastAccess = Date.now();
-    }
-  
-    // Simple function to hash passwords in order for us not to store then in clear text
-    hashPassword(rawPassword){
-      var a = 1, c = 0, h, o;
-      if (rawPassword) {
-        a = 0;
-        /*jshint plusplus:false bitwise:false*/
-        //This is a loop that goes through all passwords and emails
-        for (h = rawPassword.length - 1; h >= 0; h--) {
-          o = rawPassword.charCodeAt(h);
-          a = (a<<6&268435455) + o + (o<<14);
-          c = a & 266338304;
-          a = c!==0?a^c>>21:a;
-        }
-      }else {
-        // If the password is not valid, we'll throw and error we're able to catch
-        throw new Error("Password or email is not correct - try again or sign up");
-      }
-      return String(a);
-    }
-  }
-  
-  // We set a debug variable in order to switch on or off debug mode of our small program
-  var debug = 1;
-  
-
-
   // Initialize an empty array
   var users = JSON.parse(localStorage.getItem("users"));
   
@@ -48,7 +17,7 @@ class User {
   // Bind the span for result text for later use
   var resultSpan = document.getElementById('loginResult');
   
-  // Bind a counter in order to see if the user has tried to login too many times
+  // counter in order to see if the user has tried to login too many times
   var counter = 3;
   
   // Bind the onClick-function to our own function
@@ -64,7 +33,7 @@ class User {
 
     if(inputUsername.value.length == 0 || inputPassword.value.length == 0){
       // We set the resultspan with a new text and return false to get out of this function
-      resultSpan.innerText = "You must write your email and valid password";
+      resultSpan.innerText = "Statee your email and password";
       return false;
     }
 
@@ -80,7 +49,7 @@ class User {
         // We try to create a variable with the hashed version of the inputPassword
         var hashedInputPassword = userType.hashPassword(inputPassword.value);
 
-      // If username and password we have in put matches the one in our loop
+      // If username and password correct we have in put matches the one in our loop
       if(user.username == inputUsername.value && user.password == hashedInputPassword)  {
         return window.location.replace("file:///Users/VincentSchulin/Desktop/web-projects/Github/mainpage.html")
       }
